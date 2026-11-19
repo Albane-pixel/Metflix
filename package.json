@@ -1,0 +1,53 @@
+{
+  "name": "metflix",
+  "version": "0.1.0",
+  "description": "Metflix - Media center de salon extensible piloté depuis smartphone",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "tsc --noEmit",
+    "dist:linux": "npm run build && electron-builder --config electron-builder.yml --linux"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Albane-pixel/Metflix_Mirror.git"
+  },
+  "keywords": [
+    "media-center",
+    "electron",
+    "mpv",
+    "typescript",
+    "react"
+  ],
+  "author": "Equipe Metflix",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Albane-pixel/Metflix_Mirror/issues"
+  },
+  "homepage": "https://github.com/Albane-pixel/Metflix_Mirror#readme",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.0",
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.0",
+    "eslint": "^10.0.0",
+    "globals": "^17.14.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.73.0",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0"
+  },
+  "overrides": {
+    "node-abi": "3.74.0"
+  }
+}

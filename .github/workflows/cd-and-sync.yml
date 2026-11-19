@@ -1,0 +1,80 @@
+name: CD - Package Linux & Sync Repo Final
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    name: Vérification finale (Lint & Tests)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v5
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Linter
+        run: npm run lint
+
+      - name: Tests unitaires et fonctionnels
+        run: npm test
+
+  build-linux-package:
+    name: Build Paquet Linux (.deb / .AppImage)
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v5
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Installation des outils système pour electron-builder
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm fakeroot dpkg
+
+      - name: Installation des dépendances npm
+        run: npm ci
+
+      - name: Build de l'application & Packaging Linux
+        run: npm run dist:linux
+
+      - name: Upload des artefacts (.deb et .AppImage)
+        uses: actions/upload-artifact@v5
+        with:
+          name: mediacenter-linux-packages
+          path: |
+            release/*.deb
+            release/*.AppImage
+          retention-days: 30
+
+  sync-to-final-repo:
+    name: Push vers le dépôt final
+    needs: [verify, build-linux-package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération complète de l'historique Git
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Push vers la branche main du dépôt final
+        env:
+          FINAL_REPO_TOKEN: ${{ secrets.FINAL_REPO_TOKEN }}
+          FINAL_REPO_URL: ${{ secrets.FINAL_REPO_URL }}
+        run: |
+          git remote add final "https://x-access-token:${FINAL_REPO_TOKEN}@${FINAL_REPO_URL}"
+          git push final main:main
