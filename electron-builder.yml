@@ -15,7 +15,6 @@ linux:
   target:
     - deb
     - AppImage
-  icon: build/icons
   category: AudioVideo
   maintainer: Equipe Metflix <contact@metflix.local>
   synopsis: Media center de salon extensible piloté depuis smartphone
