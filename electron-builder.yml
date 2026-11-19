@@ -1,0 +1,34 @@
+appId: com.metflix.mediacenter
+productName: Metflix
+copyright: Copyright © 2026 Metflix
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - package.json
+
+linux:
+  target:
+    - deb
+    - AppImage
+  icon: build/icons
+  category: AudioVideo
+  maintainer: Equipe Metflix <contact@metflix.local>
+  synopsis: Media center de salon extensible piloté depuis smartphone
+  description: >
+    Application media center de salon avec gestion de médiathèque locale et SMB,
+    lecture via mpv, système d'extensions isolées et télécommande web.
+
+deb:
+  depends:
+    - mpv
+    - libnotify4
+    - libxtst6
+    - libnss3
+
+appImage:
+  artifactName: "${productName}-${version}-${arch}.AppImage"
