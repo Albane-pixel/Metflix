@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "description": "Metflix - Media center de salon extensible piloté depuis smartphone",
   "main": "dist-electron/main.js",
-  "scripts": {
+"scripts": {
     "dev": "vite",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "build": "tsc --noEmit",
+    "build": "tsc && mkdir -p dist",
     "dist:linux": "npm run build && electron-builder --config electron-builder.yml --linux"
   },
   "repository": {
