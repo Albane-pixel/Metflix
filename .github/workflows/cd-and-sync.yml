@@ -71,10 +71,24 @@ jobs:
         with:
           fetch-depth: 0
 
+      # - name: Push vers la branche main du dépôt final
+      #   env:
+      #     FINAL_REPO_TOKEN: ${{ secrets.FINAL_REPO_TOKEN }}
+      #     FINAL_REPO_URL: ${{ secrets.FINAL_REPO_URL }}
+      #   run: |
+      #     git remote add final "https://x-access-token:${FINAL_REPO_TOKEN}@${FINAL_REPO_URL}"
+      #     git push final main:main
       - name: Push vers la branche main du dépôt final
         env:
           FINAL_REPO_TOKEN: ${{ secrets.FINAL_REPO_TOKEN }}
           FINAL_REPO_URL: ${{ secrets.FINAL_REPO_URL }}
         run: |
-          git remote add final "https://x-access-token:${FINAL_REPO_TOKEN}@${FINAL_REPO_URL}"
-          git push final main:main
+          if [ -z "${FINAL_REPO_TOKEN}" ] || [ -z "${FINAL_REPO_URL}" ]; then
+            echo "Secrets FINAL_REPO_TOKEN ou FINAL_REPO_URL manquants."
+            exit 1
+          fi
+          CLEAN_URL="${FINAL_REPO_URL#https://}"
+          CLEAN_URL="${CLEAN_URL%.git}.git"
+          BASIC_AUTH=$(printf "x-access-token:%s" "${FINAL_REPO_TOKEN}" | base64 -w 0)
+          git -c "http.https://github.com/.extraHeader=Authorization: Basic ${BASIC_AUTH}" \
+            push "https://${CLEAN_URL}" HEAD:refs/heads/main
