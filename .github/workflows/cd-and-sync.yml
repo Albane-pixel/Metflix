@@ -83,7 +83,7 @@ jobs:
           fi
           CLEAN_URL="${FINAL_REPO_URL#https://}"
           CLEAN_URL="${CLEAN_URL%.git}.git"
-          git push "https://x-access-token:${FINAL_REPO_TOKEN}@${CLEAN_URL}" HEAD:refs/heads/main
+          git push --force "https://x-access-token:${FINAL_REPO_TOKEN}@${CLEAN_URL}" HEAD:refs/heads/main
 
       # - name: Push vers la branche main du dépôt final
       #   env:
